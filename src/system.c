@@ -39,7 +39,7 @@ void renderSystem(System *sys, f64 pix_per_au, Vec2_f64 cam_pos)
 	for (size_t i=0; i<sys->len; i++)
 	{
 		Object *obj = sys->objs + i;
-		DrawCircle(obj->pos.x * pix_per_au + cam_pos.x, obj->pos.y * pix_per_au + cam_pos.y, log10(obj->mass * 0.05 + 1.2)*20, RAYWHITE);
+		DrawCircle(obj->pos.x * pix_per_au + cam_pos.x, obj->pos.y * pix_per_au + cam_pos.y, log10(obj->mass * 0.05 + 1.2)*20*pix_per_au/PIX_PER_AU, RAYWHITE);
 	}
 }
 

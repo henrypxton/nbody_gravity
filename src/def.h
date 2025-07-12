@@ -12,6 +12,11 @@
 #define MAXIMIZE
 #define HIDE_INFO
 
+#define PIX_PER_AU 100
+#define TIME_SCALE 64
+#define ZOOM_SPEED 10
+#define MOVE_SPEED 100
+
 #define G 8.898e-10
 #define TIME_SUBSTEP 0.1
 

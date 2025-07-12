@@ -1,4 +1,5 @@
 #include "system.h"
+#include "view.h"
 
 int main()
 {
@@ -15,7 +16,7 @@ int main()
 	System *sys = createSystem();
 
 	// PLANET      | INITAL POSITION      | INITIAL VELOCITY         | INITIAL ACCELERATION | MASS
-	// --====================================================================================--
+	// --=========================================================================================--
 	// sun
 	addObject(sys, (Vec2_f64){0.00,0.00}, (Vec2_f64){0.0000,0.0000}, (Vec2_f64){0.00,0.00}, 333000); 
 	// earth
@@ -23,12 +24,22 @@ int main()
 	// jupiter
 	addObject(sys, (Vec2_f64){5.20,0.00}, (Vec2_f64){0.0000,0.0075}, (Vec2_f64){0.00,0.00}, 318.00);
 
+	ViewState vs = (ViewState){ 
+		{ GetScreenWidth()/2, GetScreenHeight()/2 },
+		PIX_PER_AU,
+		TIME_SCALE,
+		0,
+		(Vector2){0}
+	};
+
 	while(!WindowShouldClose())
 	{
+		updateView(&vs);
+		updateSystem(sys, vs.dt, vs.time_scale);
+
 		BeginDrawing();
 			ClearBackground(BLACK);
-			renderSystem(sys, 100, (Vec2_f64){WIDTH/2, HEIGHT/2});
-			updateSystem(sys, GetFrameTime(), 80);
+			renderSystem(sys, vs.pix_per_au, vs.cam_pos);
 		EndDrawing();
 	}
 
