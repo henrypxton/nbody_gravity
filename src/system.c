@@ -43,4 +43,55 @@ void renderSystem(System *sys, f64 pix_per_au, Vec2_f64 cam_pos)
 	}
 }
 
-void updateSystem(System *sys);
+void updateSystem(System *sys, f64 dt, f32 time_scale)
+{
+	f64 total_dt = dt * time_scale;
+	u32 steps = (u32)(total_dt / TIME_SUBSTEP) + 1;
+	f64 subset_dt = total_dt / steps; 
+	
+	for (u32 s=0; s<steps; s++)
+	{
+		// update position: x(t + dt) = x(t) + v(t) dt + 1/2 a(t) dt^2
+		for (size_t i=0; i<sys->len; i++)
+		{
+			Object *a = sys->objs + i;
+			a->pos.x = a->pos.x + a->vel.x * subset_dt + 0.5 * a->acc.x * subset_dt * subset_dt;
+			a->pos.y = a->pos.y + a->vel.y * subset_dt + 0.5 * a->acc.y * subset_dt * subset_dt;
+		}
+
+		// store current acceleration
+		Vec2_f64 old_accs[sys->len];
+		for (size_t i=0; i<sys->len; i++)
+			old_accs[i] = sys->objs[i].acc;
+
+		// calculate new acceleration: a = G * m / r^2
+		for (size_t i=0; i<sys->len; i++)
+		{
+			Object *a = sys->objs + i;
+			a->acc = (Vec2_f64){ 0, 0 };
+			for (size_t j=0; j<sys->len; j++)
+			{
+				if (i==j) continue;
+
+				Object *b = sys->objs + j;
+
+				f64 dx = b->pos.x - a->pos.x;
+				f64 dy = b->pos.y - a->pos.y;
+				f64 dist_sqr = dx * dx + dy * dy;
+				f64 dist = sqrt(dist_sqr);
+				f64 acc = G * b->mass / dist_sqr;
+				
+				a->acc.x += acc * dx / dist;
+				a->acc.y += acc * dy / dist;
+			}
+		}
+
+		// calculate velocity: v(t + dt) = v(t) + 1/2 ( a(t) + a(t + dt) ) * dt;
+		for (size_t i=0; i<sys->len; i++)
+		{
+			Object *a = sys->objs + i;
+			a->vel.x = a->vel.x + 0.5 * ( old_accs[i].x + a->acc.x ) * subset_dt;
+			a->vel.y = a->vel.y + 0.5 * ( old_accs[i].y + a->acc.y ) * subset_dt;
+		}
+	}
+}

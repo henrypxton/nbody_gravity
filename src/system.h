@@ -24,6 +24,6 @@ void destroySystem(System *sys);
 void addObject(System *sys, Vec2_f64 pos, Vec2_f64 vel, Vec2_f64 acc, f64 mass);
 void printSystem(System *sys);
 void renderSystem(System *sys, f64 pix_per_au, Vec2_f64 cam_pos);
-void updateSystem(System *sys);
+void updateSystem(System *sys, f64 dt, f32 time_scale);
 
 #endif

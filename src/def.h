@@ -12,6 +12,9 @@
 #define MAXIMIZE
 #define HIDE_INFO
 
+#define G 8.898e-10
+#define TIME_SUBSTEP 0.1
+
 typedef int i32;
 typedef unsigned int u32;
 typedef float f32;
