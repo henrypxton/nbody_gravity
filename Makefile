@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -I./src $(shell pkg-config --cflags raylib)
-LDFLAGS = $(shell pkg-config --libs raylib)
+LDFLAGS = $(shell pkg-config --libs raylib) -lm
 
 SRC_DIR = src
 BLD_DIR = build
