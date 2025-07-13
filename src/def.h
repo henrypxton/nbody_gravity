@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <math.h>
 
+#define SYSTEM_FILE "./systems/our_solar_system.txt"
+
 // window initialisation
 #define WIDTH 1000
 #define HEIGHT 450
@@ -19,7 +21,7 @@
 #define DEFAULT_TIME_SCALE 64
 #define ZOOM_SPEED 1.1
 #define DRAG_SPEED 100
-#define OBJ_RADIUS(obj_mass) (log10((obj_mass) * 0.05 + 1.2) * 20.0 / DEFAULT_PIX_PER_AU)
+#define OBJ_RADIUS(obj_mass) (log10((obj_mass) * 0.02 + 1.2) * 4.0 / DEFAULT_PIX_PER_AU)
 
 // physics sim constants
 #define G 8.898e-10
