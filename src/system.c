@@ -34,18 +34,19 @@ void printSystem(System *sys)
 	}
 }
 
-void renderSystem(System *sys, f64 pix_per_au, Vec2_f64 cam_pos)
+void renderSystem(System *sys, ViewState *vs)
 {
 	for (size_t i=0; i<sys->len; i++)
 	{
 		Object *obj = sys->objs + i;
-		DrawCircle(obj->pos.x * pix_per_au + cam_pos.x, obj->pos.y * pix_per_au + cam_pos.y, log10(obj->mass * 0.05 + 1.2)*20*pix_per_au/PIX_PER_AU, RAYWHITE);
+		Vec2_f64 screen_coord = world_to_screen(obj->pos, vs);
+		DrawCircle(screen_coord.x, screen_coord.y, OBJ_RADIUS(obj->mass) * vs->pix_per_au, RAYWHITE);
 	}
 }
 
-void updateSystem(System *sys, f64 dt, f32 time_scale)
+void updateSystem(System *sys, ViewState *vs)
 {
-	f64 total_dt = dt * time_scale;
+	f64 total_dt = vs->dt * vs->time_scale;
 	u32 steps = (u32)(total_dt / TIME_SUBSTEP) + 1;
 	f64 subset_dt = total_dt / steps; 
 	
